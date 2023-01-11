@@ -1,18 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>kitoblar</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-        
-    </head>
-    <body>
+        <title>Kitob</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css?family=Ubuntu');
+            * {
+                box-sizing: border-box;
+            }
+            h1 {
+                text-position: top;
+            }
+            body {
+                color: white;
+                font-family: 'Ubuntu', sans-serif;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                overflow: hidden;
+                margin: 0;
+            }
+            .bg {
+                background: url('https://catherineasquithgallery.com/uploads/posts/2021-02/1614390749_15-p-kniga-na-temnom-fone-22.jpg') no-repeat center center/cover;
+                position: absolute;
+                top: -30px;
+                left: -30px;
+                width: calc(100vw + 60px);
+                height: calc(100vh + 60px);
+                z-index: -1;
+                filter: blur(100px);
+            }
+            .loading-text {
+                font-size: 50px;
+                color: #fff;
+            }
+        </style>
         <h1>
             Barcha kitoblar ro'yxati
         </h1>
+    </head>
+    <body>
+        <section class="bg"></section>
+        <div class="loading-text">0%</div>
+
+        
 
         {% for book in object_list %}
             <ul>
@@ -23,7 +54,29 @@
                 <li>Kitob narxi : {{ book.narx }}</li>
             </ul>
         {% endfor %}
+        <script>
+            const loadText = document.querySelector('.loading-text')
+            const bg = document.querySelector('.bg')
 
-        
+            let load = 0
+
+            let int = setInterval(blurring, 30)
+
+            function blurring() {
+                load++
+
+                if (load > 99) {
+                    clearInterval(int)
+                }
+
+                loadText.innerText = `${load}%`
+                loadText.style.opacity = scale(load, 0, 100, 1, 0)
+                bg.style.filter = `blur(${scale(load, 0, 100, 30, 0)}px)`
+            }
+
+            const scale = (num, in_min, in_max, out_min, out_max) => {
+                return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+            }
+        </script>
     </body>
 </html>
